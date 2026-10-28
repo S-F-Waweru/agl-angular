@@ -354,6 +354,57 @@
   .step h4{font-family:var(--font-display);font-size:1.1rem;margin:12px 0 10px;color:var(--ink);}
   .step p{font-size:0.9rem;color:var(--grey);}
 
+  /* circular process — applied wherever .steps-circle is added (home + /process) */
+  .steps-circle{
+    --ring-r:36%;           /* radius of the loop, as a share of the square container */
+    --card-w:220px;
+    display:block;
+    position:relative;
+    width:min(880px, 100%);
+    margin:0 auto;
+    aspect-ratio:1/1;
+  }
+  /* the dashed loop the six steps sit on, slowly turning to read as a cycle */
+  .steps-circle::before{
+    content:"";position:absolute;left:50%;top:50%;
+    width:calc(var(--ring-r) * 2);height:calc(var(--ring-r) * 2);
+    transform:translate(-50%,-50%);
+    border:1px dashed var(--line-orange);border-radius:50%;
+    animation:ring-flow 60s linear infinite;
+  }
+  @keyframes ring-flow{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+  .steps-circle .step{
+    position:absolute;
+    width:var(--card-w);
+    padding:16px 18px 18px;
+    border:1px solid var(--line);
+    background:var(--cream);
+    text-align:center;
+    transform:translate(-50%,-50%);
+  }
+  .steps-circle .step .idx{
+    width:30px;height:30px;margin:0 auto 10px;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line-orange);border-radius:50%;
+    background:var(--white);
+    font-size:0.72rem;
+  }
+  .steps-circle .step h4{margin:0 0 8px;font-size:1.02rem;line-height:1.35;}
+  .steps-circle .step p{font-size:0.8rem;line-height:1.5;}
+  /* anchors every 60deg: 12, 2, 4, 6, 8 and 10 o'clock (cos/sin of the ring radius) */
+  .steps-circle .step:nth-child(1){left:50%;top:calc(50% - var(--ring-r));}
+  .steps-circle .step:nth-child(2){left:calc(50% + var(--ring-r) * 0.866);top:calc(50% - var(--ring-r) * 0.5);}
+  .steps-circle .step:nth-child(3){left:calc(50% + var(--ring-r) * 0.866);top:calc(50% + var(--ring-r) * 0.5);}
+  .steps-circle .step:nth-child(4){left:50%;top:calc(50% + var(--ring-r));}
+  .steps-circle .step:nth-child(5){left:calc(50% - var(--ring-r) * 0.866);top:calc(50% + var(--ring-r) * 0.5);}
+  .steps-circle .step:nth-child(6){left:calc(50% - var(--ring-r) * 0.866);top:calc(50% - var(--ring-r) * 0.5);}
+  .step-hub{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    text-align:center;
+  }
+  .hub-strong{font-family:var(--font-display);font-size:1.2rem;font-weight:600;color:var(--ink);}
+  .hub-sub{font-family:var(--font-mono);font-size:0.64rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange-deep);margin-top:5px;}
+
   /* ---------- SUBPAGES ---------- */
   .sub-h{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--ink);margin-bottom:16px;}
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start;}
@@ -431,6 +482,19 @@
     .service-photo{aspect-ratio:16/10;}
     .show-grid{grid-template-columns:repeat(2,1fr);}
     .steps{grid-template-columns:1fr 1fr;row-gap:30px;}
+    /* the loop doesn't survive a narrow screen — fall back to the linear steps */
+    .steps-circle{display:grid;width:auto;aspect-ratio:auto;margin:0;}
+    .steps-circle::before{display:none;}
+    .step-hub{display:none;}
+    .steps-circle .step{
+      position:static;left:auto;top:auto;transform:none;
+      width:auto;padding:30px 28px 0;border:none;border-top:2px solid var(--line);
+      text-align:left;
+    }
+    .steps-circle .step.active-line{border-top-color:var(--orange);}
+    .steps-circle .step .idx{width:auto;height:auto;margin:0;border:none;border-radius:0;background:none;display:block;}
+    .steps-circle .step h4{margin:12px 0 10px;font-size:1.1rem;}
+    .steps-circle .step p{font-size:0.9rem;}
     .two-col{grid-template-columns:1fr;gap:40px;}
     .lb-inner{grid-template-columns:1fr;}
     .lb-nav{display:none;}
@@ -444,5 +508,6 @@
     .sweep{animation:none;display:none;}
     .reveal{transition:none;opacity:1;transform:none;}
     .pm-track{animation:none;}
+    .steps-circle::before{animation:none;}
     html{scroll-behavior:auto;}
   }
