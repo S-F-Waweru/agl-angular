@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 44" width="190" height="44" role="img" aria-label="Equinox Projects">
+  <g fill="none" stroke="#565656" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="20" cy="22" r="11"/>
+    <path d="M9 22h22"/>
+    <path d="M12 16q8 6 16 0M12 28q8-6 16 0" stroke="#f69324"/>
+  </g>
+  <text x="46" y="21" font-family="'Space Grotesk',Inter,sans-serif" font-size="15" font-weight="700" letter-spacing="0.5" fill="#3f4249">EQUINOX</text>
+  <text x="46" y="35" font-family="'IBM Plex Mono',monospace" font-size="8" letter-spacing="2.5" fill="#f69324">PROJECTS</text>
+</svg>

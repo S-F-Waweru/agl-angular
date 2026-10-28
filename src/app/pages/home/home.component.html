@@ -14,22 +14,17 @@
         </div>
       </div>
       <div class="pane-hero">
-        <svg viewBox="0 0 400 420" fill="none">
-          <rect x="24" y="20" width="352" height="380" stroke="#f69324" stroke-width="1.5" opacity="0.6"/>
-          <rect x="24" y="20" width="352" height="380" fill="url(#paneFill)"/>
-          <line x1="24" y1="140" x2="376" y2="140" stroke="#c9c3b2" stroke-width="1"/>
-          <line x1="24" y1="280" x2="376" y2="280" stroke="#c9c3b2" stroke-width="1"/>
-          <line x1="140" y1="20" x2="140" y2="400" stroke="#c9c3b2" stroke-width="1"/>
-          <line x1="260" y1="20" x2="260" y2="400" stroke="#c9c3b2" stroke-width="1"/>
-          <rect x="24" y="20" width="352" height="380" stroke="#606060" stroke-width="6" fill="none" opacity="0.12"/>
-          <defs>
-            <linearGradient id="paneFill" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#f69324" stop-opacity="0.16"/>
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.4"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        <div class="sweep"></div>
+        <div class="about-carousel" id="heroCarousel" aria-live="off"></div>
+        <div class="frame-corner fc-tl"></div>
+        <div class="frame-corner fc-br"></div>
+      </div>
+    </div>
+    <div class="partners-marquee">
+      <div class="pm-viewport">
+        <div class="pm-track">
+          @for (p of partners; track p.name) { <span class="pm-item"><img [src]="p.logo" [alt]="p.name + ' logo'"></span> }
+          @for (p of partners; track $index) { <span class="pm-item" aria-hidden="true"><img [src]="p.logo" [alt]="p.name + ' logo'" loading="lazy"></span> }
+        </div>
       </div>
     </div>
   </section>
@@ -54,14 +49,9 @@
       <div class="grid">
         <div class="about-figure reveal">
           <div class="grid-bg"></div>
+          <div class="about-carousel" id="aboutCarousel"></div>
           <div class="frame-corner fc-tl"></div>
           <div class="frame-corner fc-br"></div>
-          <svg viewBox="0 0 300 380" style="position:absolute;inset:0;margin:auto;width:70%;" fill="none">
-            <rect x="20" y="20" width="260" height="340" rx="2" stroke="#f69324" stroke-width="1.5" opacity="0.7"/>
-            <path d="M20 130 L280 130 M20 250 L280 250" stroke="#c9c3b2"/>
-            <path d="M150 20 L150 360" stroke="#c9c3b2"/>
-            <circle cx="150" cy="190" r="34" stroke="#606060" stroke-width="1.5" opacity="0.5"/>
-          </svg>
         </div>
         <div class="about-copy reveal">
           <p>Alternative Glasses Limited is a Kenyan aluminium and glass fabrication company, building the details that hold spaces together — frames, panels, partitions and railings.</p>
@@ -235,7 +225,7 @@
       <div class="grid">
         <div class="reveal">
           <div class="eyebrow">Get In Touch</div>
-          <h2 style="font-family:var(--font-display);font-size:2rem;color:var(--ink);margin-bottom:34px;">Tell us about your project.</h2>
+          <h2 style="font-family:var(--font-display),serif;font-size:2rem;color:var(--ink);margin-bottom:34px;">Tell us about your project.</h2>
 
           <div class="info-block">
             <div class="k">Location</div>
@@ -247,7 +237,7 @@
           </div>
           <div class="info-block">
             <div class="k">Email</div>
-            <div class="v">alternativeglasslimited@gmail.com</div>
+            <div class="v">alternativeglasslimited&#64;gmail.com</div>
           </div>
           <div class="info-block">
             <div class="k">Website</div>
