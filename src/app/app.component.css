@@ -350,7 +350,7 @@
 
   /* ---------- PROCESS ---------- */
   .process{background:var(--cream-deep);border-top:1px solid var(--line);}
-  .steps{display:grid;grid-template-columns:repeat(6,1fr);gap:0;counter-reset:step;}
+  .steps{display:grid;grid-template-columns:repeat(7,1fr);gap:0;counter-reset:step;}
   .step{padding:30px 28px 0;border-top:2px solid var(--line);position:relative;}
   .step.active-line{border-top-color:var(--orange);}
   .step .idx{font-family:var(--font-mono);font-size:0.78rem;color:var(--orange-deep);}
@@ -359,15 +359,15 @@
 
   /* circular process — applied wherever .steps-circle is added (home + /process) */
   .steps-circle{
-    --ring-r:36%;           /* radius of the loop, as a share of the square container */
+    --ring-r:38%;           /* radius of the loop, as a share of the square container */
     --card-w:220px;
     display:block;
     position:relative;
-    width:min(880px, 100%);
+    width:min(900px, 100%);
     margin:0 auto;
     aspect-ratio:1/1;
   }
-  /* the dashed loop the six steps sit on, slowly turning to read as a cycle */
+  /* the dashed loop the seven steps sit on, slowly turning to read as a cycle */
   .steps-circle::before{
     content:"";position:absolute;left:50%;top:50%;
     width:calc(var(--ring-r) * 2);height:calc(var(--ring-r) * 2);
@@ -394,13 +394,14 @@
   }
   .steps-circle .step h4{margin:0 0 8px;font-size:1.02rem;line-height:1.35;}
   .steps-circle .step p{font-size:0.8rem;line-height:1.5;}
-  /* anchors every 60deg: 12, 2, 4, 6, 8 and 10 o'clock (cos/sin of the ring radius) */
+  /* anchors every 51.4deg — seven cards round the ring (cos/sin of the ring radius) */
   .steps-circle .step:nth-child(1){left:50%;top:calc(50% - var(--ring-r));}
-  .steps-circle .step:nth-child(2){left:calc(50% + var(--ring-r) * 0.866);top:calc(50% - var(--ring-r) * 0.5);}
-  .steps-circle .step:nth-child(3){left:calc(50% + var(--ring-r) * 0.866);top:calc(50% + var(--ring-r) * 0.5);}
-  .steps-circle .step:nth-child(4){left:50%;top:calc(50% + var(--ring-r));}
-  .steps-circle .step:nth-child(5){left:calc(50% - var(--ring-r) * 0.866);top:calc(50% + var(--ring-r) * 0.5);}
-  .steps-circle .step:nth-child(6){left:calc(50% - var(--ring-r) * 0.866);top:calc(50% - var(--ring-r) * 0.5);}
+  .steps-circle .step:nth-child(2){left:calc(50% + var(--ring-r) * 0.782);top:calc(50% - var(--ring-r) * 0.623);}
+  .steps-circle .step:nth-child(3){left:calc(50% + var(--ring-r) * 0.975);top:calc(50% + var(--ring-r) * 0.223);}
+  .steps-circle .step:nth-child(4){left:calc(50% + var(--ring-r) * 0.434);top:calc(50% + var(--ring-r) * 0.901);}
+  .steps-circle .step:nth-child(5){left:calc(50% - var(--ring-r) * 0.434);top:calc(50% + var(--ring-r) * 0.901);}
+  .steps-circle .step:nth-child(6){left:calc(50% - var(--ring-r) * 0.975);top:calc(50% + var(--ring-r) * 0.223);}
+  .steps-circle .step:nth-child(7){left:calc(50% - var(--ring-r) * 0.782);top:calc(50% - var(--ring-r) * 0.623);}
   .step-hub{
     position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     text-align:center;
