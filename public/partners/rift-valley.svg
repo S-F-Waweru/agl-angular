@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 44" width="190" height="44" role="img" aria-label="Rift Valley Glass">
-  <g fill="none" stroke="#565656" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M8 10l10 12-10 12z" opacity="0.6"/>
-    <path d="M32 10l-10 12 10 12z"/>
-    <path d="M18 22h4" stroke="#f69324"/>
-  </g>
-  <text x="46" y="21" font-family="'Space Grotesk',Inter,sans-serif" font-size="15" font-weight="700" letter-spacing="0.5" fill="#3f4249">RIFT VALLEY</text>
-  <text x="46" y="35" font-family="'IBM Plex Mono',monospace" font-size="8" letter-spacing="2.5" fill="#f69324">GLASS CO</text>
-</svg>

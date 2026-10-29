@@ -2,4 +2,5 @@
 /dist
 /.angular
 /assets/originals
+.DS_Store
 *.log

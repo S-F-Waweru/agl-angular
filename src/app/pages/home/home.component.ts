@@ -54,6 +54,32 @@ const HERO_SLIDES: { img: string; label: string }[] = [
   { img: '/images/balustrade.jpg', label: 'Glass Balustrades' }
 ];
 
+/** Partner logos for the hero marquee — files live in public/partners/LOGOS, slug-cased and capped at 600px. */
+const PARTNERS: { name: string; logo: string }[] = [
+  { name: 'ABC Tiles', logo: '/partners/LOGOS/abc-tiles.jpg' },
+  { name: 'Air Arabia', logo: '/partners/LOGOS/air-arabia.png' },
+  { name: 'Amara Gardens', logo: '/partners/LOGOS/amara-gardens.jpg' },
+  { name: 'Business Bay Square', logo: '/partners/LOGOS/business-bay-square.jpg' },
+  { name: 'Chicken Cottage', logo: '/partners/LOGOS/chicken-cottage.jpg' },
+  { name: "CJ's", logo: '/partners/LOGOS/cjs.jpg' },
+  { name: 'City Oil', logo: '/partners/LOGOS/city-oil.png' },
+  { name: 'Eldo Plaza', logo: '/partners/LOGOS/eldo-plaza.jpg' },
+  { name: 'Epic Ceramics', logo: '/partners/LOGOS/epic-ceramics.png' },
+  { name: 'Ingenious Solution', logo: '/partners/LOGOS/ingenious-solution.jpg' },
+  { name: 'IZWOF', logo: '/partners/LOGOS/izwof.jpg' },
+  { name: 'Khalif Modern Homes', logo: '/partners/LOGOS/khalif-homes.jpg' },
+  { name: 'Luqman', logo: '/partners/LOGOS/luqman.png' },
+  { name: 'Macaash', logo: '/partners/LOGOS/macaash.png' },
+  { name: 'OKA Group', logo: '/partners/LOGOS/oka-group.jpg' },
+  { name: "Papa John's", logo: '/partners/LOGOS/papa-johns.png' },
+  { name: 'Prime Brick Developers', logo: '/partners/LOGOS/prime-brick.png' },
+  { name: 'Rubis', logo: '/partners/LOGOS/rubis.jpg' },
+  { name: 'Somerica', logo: '/partners/LOGOS/somerica.png' },
+  { name: 'Tanzil Gardens', logo: '/partners/LOGOS/tanzil-gardens.png' },
+  { name: 'Union Homes', logo: '/partners/LOGOS/union-homes.png' },
+  { name: 'Wakefield', logo: '/partners/LOGOS/wakefield.png' }
+];
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -64,17 +90,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   private readonly cleanup: Array<() => void> = [];
   private currentIdx = 0;
 
-  /** Partners for the hero marquee. Drop real logo files into public/partners and update these paths. */
-  readonly partners: { name: string; logo: string }[] = [
-    { name: 'Sunrise Contractors', logo: '/partners/sunrise.svg' },
-    { name: 'Capstone Builders', logo: '/partners/capstone.svg' },
-    { name: 'BlueCrest Architects', logo: '/partners/bluecrest.svg' },
-    { name: 'Mavuno Interiors', logo: '/partners/mavuno.svg' },
-    { name: 'Rift Valley Glass', logo: '/partners/rift-valley.svg' },
-    { name: 'Equinox Projects', logo: '/partners/equinox.svg' },
-    { name: 'Penta Construction', logo: '/partners/penta.svg' },
-    { name: 'Greenline Facilities', logo: '/partners/greenline.svg' }
-  ];
+  /** Partners for the hero marquee. */
+  readonly partners = PARTNERS;
 
   constructor(private readonly host: ElementRef<HTMLElement>) {}
 
