@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LocationMapComponent } from '../../components/location-map/location-map.component';
+import { readQuoteForm, submitQuoteRequest } from '../../data/quote-request';
 
 type Category = 'shower' | 'office' | 'curtain' | 'railing' | 'window' | 'custom';
 
@@ -9,8 +11,8 @@ interface ShowroomItem {
   title: string;
   desc: string;
   specs: Record<string, string>;
-  /** Project photo from /images; falls back to the line-art icon when absent. */
-  img?: string;
+  /** Project photo(s) from /images; several photos render as a carousel. Falls back to the line-art icon when absent. */
+  img?: string | string[];
 }
 
 const ICONS: Record<Category, string> = {
@@ -43,11 +45,10 @@ const ITEMS: ShowroomItem[] = [
   // {cat:'railing', tag:'Stainless Steel Railings', title:'Cable Wire Balustrade', desc:'Slim stainless posts with tensioned cable infill, for an open, low-profile balcony rail.', specs:{Steel:'Grade 316 marine stainless', Infill:'Tensioned cable wire', Finish:'Brushed', Application:'Balcony / outdoor'}}
   {cat:'window', tag:'Windows & Doors', title:'Projected Window Bank', desc:'A run of projected windows in dark aluminium frames, venting an office while leaving the view out unbroken.', specs:{Profile:'Aluminium, black anodised', Opening:'Projected, top-hung', Glass:'6mm clear tempered', Hardware:'Friction stays & handle'}, img:'/images/projected-windows.jpg'},
   {cat:'window', tag:'Windows & Doors', title:'Frameless Glass Swing Doors', desc:'Frameless glass leaves with fixed side panels, opening an entrance to the full width of the storefront.', specs:{Glass:'12mm tempered', Frame:'Frameless', Hardware:'Patch fittings & floor spring', Finish:'Polished stainless'}, img:'/images/frameless-swing-door.jpg'},
-  {cat:'window', tag:'Windows & Doors', title:'Residential Sliding Glazing', desc:'Full-width sliding windows in an apartment, dark frames with a clear view out to the grounds.', specs:{Profile:'Aluminium, black', Opening:'Sliding, interlocking', Glass:'6mm tempered clear', Hardware:'Flush pull handle'}, img:'/images/sliding-windows-residential.jpg'},
+  {cat:'window', tag:'Windows & Doors', title:'Residential Sliding window', desc:'Full-width sliding windows in an apartment, dark frames with a clear view out to the grounds.', specs:{Profile:'Aluminium, black', Opening:'Sliding, interlocking', Glass:'6mm tempered clear', Hardware:'Flush pull handle'}, img:'/images/sliding-windows-residential.jpg'},
   {cat:'window', tag:'Windows & Doors', title:'Sliding Window Pair', desc:'Two-track sliding windows with slim dark frames, sized for the main openings of a townhouse.', specs:{Profile:'Aluminium, powder-coated', Opening:'Sliding, two tracks', Glass:'6mm clear', Screen:'Optional insect screen'}, img:'/images/sliding-window-town-house.jpg'},
   {cat:'window', tag:'Windows & Doors', title:'Sliding Window & Balcony Glazing', desc:'A tall sliding window paired with a glass balcony panel, set into a feature arch on a townhouse elevation.', specs:{Profile:'Aluminium, dark', Opening:'Sliding, two tracks', Glass:'6mm clear', Balcony:'Fixed glass panel'}, img:'/images/sliding-window-balcony-balustrade.jpg'},
-  {cat:'window', tag:'Windows & Doors', title:'Townhouse Window Set', desc:'A repeated set of fixed and sliding windows glazing a terrace of townhouse units, matched to the gate finishes.', specs:{Profile:'Aluminium, dark anodised', Units:'Mixed fixed and sliding', Glass:'6mm clear tempered', Install:'Programme of units'}, img:'/images/sliding-windows-town-house-row.jpg'},
-  {cat:'window', tag:'Windows & Doors', title:'Framed Window in Render Reveal', desc:'Sliding windows set into a recessed render reveal, with a fixed top light above the opening.', specs:{Profile:'Aluminium, graphite', Opening:'Sliding with top fixed light', Glass:'6mm clear', Finish:'Contrast frame to render'}, img:'/images/sliding-windows-town-house-detail.jpg'},
+  {cat:'window', tag:'Windows & Doors', title:'Townhouse Window Set', desc:'A repeated set of fixed and sliding windows glazing a terrace of townhouse units, matched to the gate finishes.', specs:{Profile:'Aluminium, dark anodised', Units:'Mixed fixed and sliding', Glass:'6mm clear tempered', Install:'Programme of units'}, img:['/images/sliding-windows-town-house-row.jpg', '/images/sliding-windows-town-house-detail.jpg']},
   {cat:'custom', tag:'Pergolas & Custom', title:'Glass Pergola Canopy', desc:'An aluminium-framed canopy of tempered glass panels over an entrance, throwing rain clear of the doorway.', specs:{Frame:'Aluminium beams, powder-coated', Glass:'Laminated tempered panels', Drainage:'Falls to the side', Finish:'Clear or tinted'}, img:'/images/glass-pergola-canopy.jpg'}
 ];
 
@@ -99,12 +100,13 @@ const PARTNERS: { name: string; logo: string }[] = [
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, LocationMapComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements AfterViewInit, OnDestroy {
   private readonly cleanup: Array<() => void> = [];
   private currentIdx = 0;
+  private disposeLightboxGallery?: () => void;
 
   /** Partners for the hero marquee. */
   readonly partners = PARTNERS;
@@ -120,9 +122,11 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     this.bindContactForm();
     this.setupCarousel('aboutCarousel', ABOUT_SLIDES, 4500);
     this.setupCarousel('heroCarousel', HERO_SLIDES, 5200);
+    this.bindPartnersMarquee();
   }
 
   ngOnDestroy(): void {
+    this.disposeLightboxGallery?.();
     this.cleanup.forEach((dispose) => dispose());
   }
 
@@ -149,7 +153,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     const grid = this.byId('showGrid');
     grid.innerHTML = ITEMS.map((item, index) => `
       <div class="show-card" data-cat="${item.cat}" data-idx="${index}">
-        <div class="art">${item.img ? `<img src="${item.img}" alt="${item.title}" loading="lazy">` : ICONS[item.cat]}</div>
+        <div class="art">${this.artMarkup(item, true)}</div>
         <div class="tag">${item.tag}</div>
         <div class="expand">＋</div>
         <div class="cap"><h4>${item.title}</h4><span>${item.cat}</span></div>
@@ -158,7 +162,68 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     this.queryAll<HTMLElement>('.show-card').forEach((card) => {
       this.listen(card, 'click', () => this.openLightbox(Number(card.dataset['idx'])));
+      const gallery = card.querySelector<HTMLElement>('.sg');
+      if (gallery) this.cleanup.push(this.bindGallery(gallery, 4000));
     });
+  }
+
+  private photos(item: ShowroomItem): string[] {
+    if (!item.img) return [];
+    return Array.isArray(item.img) ? item.img : [item.img];
+  }
+
+  /** Single photo, a photo carousel (2+ photos), or the line-art icon. */
+  private artMarkup(item: ShowroomItem, lazy: boolean): string {
+    const photos = this.photos(item);
+    const loading = (i: number): string => (lazy || i > 0 ? ' loading="lazy"' : '');
+    if (photos.length === 0) return ICONS[item.cat];
+    if (photos.length === 1) return `<img src="${photos[0]}" alt="${item.title}"${loading(0)}>`;
+    return `
+      <div class="sg">
+        ${photos.map((src, i) => `
+          <div class="ac-slide sg-slide${i === 0 ? ' active' : ''}" data-i="${i}">
+            <img src="${src}" alt="${item.title} — photo ${i + 1} of ${photos.length}"${loading(i)}>
+          </div>`).join('')}
+        <button type="button" class="ac-btn sg-btn sg-prev" aria-label="Previous photo">&#8592;</button>
+        <button type="button" class="ac-btn sg-btn sg-next" aria-label="Next photo">&#8594;</button>
+        <div class="sg-dots">${photos.map((_, i) => `<button type="button" class="ac-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="Show photo ${i + 1}"></button>`).join('')}</div>
+      </div>`;
+  }
+
+  /** Wires a photo carousel rendered by artMarkup. Returns a disposer. autoMs = 0 disables auto-advance. */
+  private bindGallery(gallery: HTMLElement, autoMs: number): () => void {
+    const slides = Array.from(gallery.querySelectorAll<HTMLElement>('.sg-slide'));
+    const dots = Array.from(gallery.querySelectorAll<HTMLElement>('.ac-dot'));
+    const disposers: Array<() => void> = [];
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    const on = (target: EventTarget, event: string, cb: EventListener): void => {
+      target.addEventListener(event, cb);
+      disposers.push(() => target.removeEventListener(event, cb));
+    };
+    const show = (next: number): void => {
+      index = ((next % slides.length) + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    };
+    const stop = (): void => { if (timer) { clearInterval(timer); timer = undefined; } };
+    const start = (): void => {
+      stop();
+      if (!autoMs || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+      timer = setInterval(() => show(index + 1), autoMs);
+    };
+    // Controls must not bubble up to the card (which opens the lightbox).
+    const control = (action: () => void): EventListener => (event) => { event.stopPropagation(); action(); };
+
+    on(gallery.querySelector('.sg-prev')!, 'click', control(() => show(index - 1)));
+    on(gallery.querySelector('.sg-next')!, 'click', control(() => show(index + 1)));
+    dots.forEach((dot, i) => on(dot, 'click', control(() => show(i))));
+    on(gallery, 'mouseenter', stop);
+    on(gallery, 'mouseleave', start);
+    start();
+
+    return () => { stop(); disposers.forEach((dispose) => dispose()); };
   }
 
   private bindTabs(): void {
@@ -225,7 +290,12 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     this.currentIdx = index;
     const item = ITEMS[index];
     if (!item) return;
-    this.byId('lbArt').innerHTML = item.img ? `<img src="${item.img}" alt="${item.title}">` : ICONS[item.cat];
+    this.disposeLightboxGallery?.();
+    this.disposeLightboxGallery = undefined;
+    const art = this.byId('lbArt');
+    art.innerHTML = this.artMarkup(item, false);
+    const gallery = art.querySelector<HTMLElement>('.sg');
+    if (gallery) this.disposeLightboxGallery = this.bindGallery(gallery, 0);
     this.byId('lbTag').textContent = item.tag;
     this.byId('lbTitle').textContent = item.title;
     this.byId('lbDesc').textContent = item.desc;
@@ -236,9 +306,10 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   private bindContactForm(): void {
-    this.listen(this.byId('quoteForm'), 'submit', (event) => {
+    const form = this.byId('quoteForm') as HTMLFormElement;
+    this.listen(form, 'submit', (event) => {
       event.preventDefault();
-      alert('This form is a working layout — connect it to email, WhatsApp, or a form service (e.g. Formspree) to receive submissions.');
+      submitQuoteRequest(readQuoteForm(form));
     });
   }
 
@@ -291,5 +362,93 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     this.listen(frame, 'mouseleave', restart);
     restart();
     this.cleanup.push(() => { if (timer) clearInterval(timer); });
+  }
+
+  /**
+   * Auto-scrolls the partners band by moving the viewport's scrollLeft, so the
+   * same strip can also be swiped/dragged by hand (a CSS transform animation
+   * can't be). The track holds the logos twice; crossing the halfway point
+   * jumps back by half, which is seamless because both halves are identical.
+   */
+  private bindPartnersMarquee(): void {
+    const viewport = this.host.nativeElement.querySelector<HTMLElement>('.pm-viewport');
+    const track = viewport?.querySelector<HTMLElement>('.pm-track');
+    if (!viewport || !track) return;
+
+    const LOOP_SECONDS = 80; // time to travel one full set of logos
+    const RESUME_DELAY_MS = 1500; // pause after the user lets go
+    let pos = viewport.scrollLeft; // fractional position; scrollLeft rounds on some browsers
+    let last = 0;
+    let frame = 0;
+    let holding = false;
+    let resumeAt = 0;
+
+    const half = (): number => track.scrollWidth / 2;
+    const wrap = (value: number): number => {
+      const h = half();
+      if (h <= 0) return value;
+      if (value >= h) return value - h;
+      if (value <= 0) return value + h;
+      return value;
+    };
+
+    const tick = (now: number): void => {
+      const dt = last ? Math.min(now - last, 100) : 0;
+      last = now;
+      if (!holding && now >= resumeAt && half() > viewport.clientWidth / 2) {
+        pos = wrap(pos + (half() / LOOP_SECONDS) * (dt / 1000));
+        viewport.scrollLeft = pos;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+
+    const hold = (): void => { holding = true; };
+    const release = (): void => { holding = false; resumeAt = performance.now() + RESUME_DELAY_MS; };
+    const onScroll = (): void => {
+      // Manual swipes (and momentum) move scrollLeft directly — follow them and keep the loop endless.
+      if (Math.abs(viewport.scrollLeft - pos) > 1) {
+        pos = wrap(viewport.scrollLeft);
+        if (pos !== viewport.scrollLeft) viewport.scrollLeft = pos;
+        resumeAt = performance.now() + RESUME_DELAY_MS;
+      }
+    };
+
+    // Desktop: drag with the mouse to scroll, same as swiping on touch.
+    let dragX = 0;
+    let dragStart = 0;
+    const onMouseDown = (event: Event): void => {
+      const e = event as MouseEvent;
+      e.preventDefault();
+      hold();
+      dragX = e.clientX;
+      dragStart = pos;
+      viewport.style.cursor = 'grabbing';
+    };
+    const onMouseMove = (event: Event): void => {
+      if (!holding || !dragX) return;
+      pos = wrap(dragStart - ((event as MouseEvent).clientX - dragX));
+      viewport.scrollLeft = pos;
+    };
+    const onMouseUp = (): void => {
+      if (!dragX) return;
+      dragX = 0;
+      viewport.style.cursor = '';
+      release();
+    };
+
+    this.listen(viewport, 'touchstart', hold);
+    this.listen(viewport, 'touchend', release);
+    this.listen(viewport, 'touchcancel', release);
+    this.listen(viewport, 'mousedown', onMouseDown);
+    this.listen(window, 'mousemove', onMouseMove);
+    this.listen(window, 'mouseup', onMouseUp);
+    this.listen(viewport, 'scroll', onScroll);
+    const onWheel = (): void => { resumeAt = performance.now() + RESUME_DELAY_MS; };
+    viewport.addEventListener('wheel', onWheel, { passive: true });
+    this.cleanup.push(() => viewport.removeEventListener('wheel', onWheel));
+    viewport.style.cursor = 'grab';
+
+    frame = requestAnimationFrame(tick);
+    this.cleanup.push(() => cancelAnimationFrame(frame));
   }
 }
