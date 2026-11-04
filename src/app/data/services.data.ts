@@ -15,8 +15,8 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'aluminium-windows-doors',
     name: 'Aluminium Windows and Doors',
-    metaTitle: 'Aluminium Windows and Doors in Nairobi | AGL',
-    metaDescription: 'AGL supplies and installs custom aluminium windows and doors in Nairobi and across Kenya for homes, offices and commercial buildings.',
+    metaTitle: 'Aluminium Windows and Doors in Nairobi | Alternative Glasses Limited',
+    metaDescription: 'Alternative Glasses Limited (AGL) supplies and installs custom aluminium windows and doors in Nairobi and across Kenya for homes, offices and commercial buildings.',
     keywords: 'aluminium windows and doors in Nairobi; aluminium doors Kenya; aluminium windows Kenya',
     intro: 'AGL provides custom aluminium windows and doors in Nairobi for residential, office and commercial projects. Aluminium profiles offer a clean, modern appearance, dependable performance and a practical solution for a wide range of openings.',
     applications: [
@@ -31,7 +31,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'office-glass-partitioning',
     name: 'Office Glass Partitioning',
-    metaTitle: 'Office Glass Partitioning in Kenya | AGL',
+    metaTitle: 'Office Glass Partitioning in Kenya | Alternative Glasses Limited',
     metaDescription: 'Create brighter, more flexible workspaces with custom office glass partitioning in Kenya from AGL.',
     keywords: 'office glass partitioning in Kenya; office partitions Nairobi; frameless glass partitions Kenya',
     intro: 'AGL delivers office glass partitioning in Kenya for modern workplaces that need privacy, natural light and a clean professional appearance. We create partitions for meeting rooms, private offices, boardrooms, reception areas and open-plan workspaces.',
@@ -47,7 +47,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'shower-cubicles',
     name: 'Shower Cubicles and Enclosures',
-    metaTitle: 'Shower Cubicles in Nairobi | Custom Glass Enclosures | AGL',
+    metaTitle: 'Custom Shower Cubicles in Nairobi | Alternative Glasses Limited',
     metaDescription: 'Order custom shower cubicles in Nairobi for homes, apartments, hotels and modern bathrooms. AGL handles measurement, fabrication and installation.',
     keywords: 'shower cubicles in Nairobi; glass shower enclosures Kenya; custom shower screens Nairobi',
     intro: 'AGL designs and installs shower cubicles in Nairobi and across Kenya. Our custom glass shower enclosures help define wet areas while maintaining a clean, open bathroom aesthetic.',
@@ -63,8 +63,8 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'curtain-walling',
     name: 'Curtain Walling',
-    metaTitle: 'Curtain Walling Contractors in Kenya | AGL',
-    metaDescription: 'AGL provides curtain walling solutions for commercial and corporate buildings in Nairobi and across Kenya.',
+    metaTitle: 'Curtain Walling Contractors in Kenya | Alternative Glasses Limited',
+    metaDescription: 'Alternative Glasses Limited (AGL) provides curtain walling solutions for commercial and corporate buildings in Nairobi and across Kenya.',
     keywords: 'curtain walling contractors in Kenya; commercial curtain walling Nairobi; aluminium curtain walling',
     intro: 'As curtain walling contractors in Kenya, AGL supports commercial and corporate projects with aluminium and glass façade solutions. Our team coordinates measurement, fabrication and installation to help create contemporary building envelopes.',
     applications: [
@@ -79,7 +79,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'glass-balustrades',
     name: 'Glass Balustrades',
-    metaTitle: 'Glass Balustrades in Kenya | AGL',
+    metaTitle: 'Glass Balustrades in Kenya | Alternative Glasses Limited',
     metaDescription: 'Improve the look and openness of staircases, balconies and walkways with custom glass balustrades in Kenya.',
     keywords: 'glass balustrades in Kenya; glass stair railings Nairobi; balcony glass balustrades',
     intro: 'AGL supplies and installs glass balustrades in Kenya for staircases, balconies, terraces and walkways. Glass balustrades provide protection while keeping views open and interiors visually light.',
@@ -95,7 +95,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'stainless-steel-railings',
     name: 'Stainless-Steel Railings',
-    metaTitle: 'Stainless-Steel Railings in Kenya | AGL',
+    metaTitle: 'Stainless-Steel Railings in Kenya | Alternative Glasses Limited',
     metaDescription: 'Get durable stainless-steel railings in Kenya for staircases, balconies, walkways and commercial spaces.',
     keywords: 'stainless-steel railings in Kenya; stainless-steel handrails Nairobi; custom metal railings Kenya',
     intro: 'AGL fabricates and installs stainless-steel railings in Kenya for homes, offices, commercial buildings and public spaces. Our railings are designed for a clean appearance, everyday use and dependable performance.',
@@ -111,8 +111,8 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'custom-glass-fabrication',
     name: 'Custom Glass Fabrication',
-    metaTitle: 'Custom Glass Fabrication in Nairobi | AGL',
-    metaDescription: 'AGL provides custom glass fabrication in Nairobi for residential, office, retail and commercial projects.',
+    metaTitle: 'Custom Glass Fabrication in Nairobi | Alternative Glasses Limited',
+    metaDescription: 'Alternative Glasses Limited (AGL) provides custom glass fabrication in Nairobi for residential, office, retail and commercial projects.',
     keywords: 'custom glass fabrication Nairobi; processed glass Kenya; architectural glass Nairobi',
     intro: 'Our custom glass fabrication service supports projects that require a specific size, shape, finish or application. We work with homeowners, contractors, designers and businesses to create glass components that fit the space they are built for.',
     applications: [
