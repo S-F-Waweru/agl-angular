@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { Meta, Title } from '@angular/platform-browser';
 import { Subscription, filter } from 'rxjs';
+import { SeoService } from './seo';
 
 interface RouteSeoData {
   title?: string;
   description?: string;
   keywords?: string;
+  jsonLd?: object;
 }
 
 @Component({
@@ -26,8 +27,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private readonly host: ElementRef<HTMLElement>,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly title: Title,
-    private readonly meta: Meta
+    private readonly seo: SeoService
   ) {
     this.routerSub = this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
@@ -79,9 +79,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       current = current.firstChild;
     }
     const data = snapshot.data as RouteSeoData;
-    if (data['title']) this.title.setTitle(data['title']);
-    if (data['description']) this.meta.updateTag({ name: 'description', content: data['description'] });
-    if (data['keywords']) this.meta.updateTag({ name: 'keywords', content: data['keywords'] });
+    if (!data.title || !data.description) return;
+    const path = this.router.url.split(/[?#]/)[0] || '/';
+    this.seo.apply({ title: data.title, description: data.description, keywords: data.keywords, path, jsonLd: data.jsonLd });
   }
 
   private closeMobileMenu(): void {

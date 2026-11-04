@@ -1,8 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Meta, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { SERVICE_PAGES, ServicePage } from '../../data/services.data';
+import { SITE_URL, SeoService } from '../../seo';
 
 /**
  * Renders a single service page from SERVICE_PAGES and applies its spec
@@ -22,8 +22,7 @@ export class ServiceDetailComponent implements OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly title: Title,
-    private readonly meta: Meta
+    private readonly seo: SeoService
   ) {
     this.paramSub = this.route.paramMap.subscribe((params) => {
       const slug = params.get('slug');
@@ -33,9 +32,26 @@ export class ServiceDetailComponent implements OnDestroy {
         return;
       }
       this.service = service;
-      this.title.setTitle(service.metaTitle);
-      this.meta.updateTag({ name: 'description', content: service.metaDescription });
-      this.meta.updateTag({ name: 'keywords', content: service.keywords });
+      const url = `${SITE_URL}/services/${service.slug}`;
+      this.seo.apply({
+        title: service.metaTitle,
+        description: service.metaDescription,
+        keywords: service.keywords,
+        path: `/services/${service.slug}`,
+        image: SITE_URL + service.image,
+        jsonLd: {
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          '@id': `${url}#service`,
+          name: service.name,
+          serviceType: service.name,
+          description: service.metaDescription,
+          url,
+          image: SITE_URL + service.image,
+          provider: { '@id': `${SITE_URL}/#business` },
+          areaServed: { '@type': 'Country', name: 'Kenya' }
+        }
+      });
     });
   }
 

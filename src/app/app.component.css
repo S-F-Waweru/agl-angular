@@ -504,6 +504,7 @@
   footer .foot-logo{display:flex;align-items:center;gap:10px;}
   footer .foot-logo img{height:26px;width:auto;}
   footer p{font-family:var(--font-mono);font-size:0.76rem;color:var(--grey-light);}
+  footer .foot-note{flex-basis:100%;font-size:0.68rem;}
 
   /* reveal animation */
   .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease, transform 0.7s ease;}
