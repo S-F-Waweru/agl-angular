@@ -1,0 +1,37 @@
+# robots.txt for https://agl.co.ke
+# Alternative Glasses Limited (AGL) - aluminium, glass and stainless-steel
+# fabrication, Nairobi, Kenya. Not affiliated with AGL Group / Africa Global Logistics.
+
+# Search engines
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: Applebot
+User-agent: YandexBot
+Allow: /
+
+# AI assistants and LLM crawlers - welcome to read and cite this site
+User-agent: Google-Extended
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Applebot-Extended
+User-agent: meta-externalagent
+User-agent: Amazonbot
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+User-agent: CCBot
+Allow: /
+
+# Everyone else
+User-agent: *
+Allow: /
+
+Sitemap: https://agl.co.ke/sitemap.xml
