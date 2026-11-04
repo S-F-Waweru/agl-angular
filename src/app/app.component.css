@@ -54,7 +54,7 @@
     height:82px;
   }
   .logo{display:flex;align-items:center;}
-  .logo img{height:40px;width:auto;}
+  .logo img{height:56px;width:auto;}
   .nav-links{display:flex;gap:36px;align-items:center;}
   .nav-links a{
     font-size:0.92rem;font-weight:500;color:var(--ink-soft);
